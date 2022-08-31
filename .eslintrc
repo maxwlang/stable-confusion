@@ -1,0 +1,28 @@
+{
+  "extends": "airbnb",
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
+  "rules": {
+    "semi": ["error", "never"],
+    "no-mixed-spaces-and-tabs": "error",
+    "indent": ["error", 4,  { "SwitchCase": 1 }],
+    "consistent-return": "off",
+    "implicit-arrow-linebreak": "off",
+    "no-use-before-define": "off",
+    "max-len": "off",
+    "camelcase": "warn",
+    "no-constant-condition": "warn",
+    "no-await-in-loop": "off",
+    "no-param-reassign": "off",
+    "no-case-declarations": "off",
+    "no-shadow": "off",
+    "arrow-parens": "off",
+    "global-require": "off",
+    "no-plusplus": "off",
+    "comma-dangle": "off"
+  },
+  "ignorePatterns": [
+    "src/sequelize/**"
+  ]
+}

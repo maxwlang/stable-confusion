@@ -1,0 +1,9 @@
+# Node
+node_modules
+
+# Build
+dist
+
+# Non-templated data
+data
+src/config/bot.ts
