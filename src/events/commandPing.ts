@@ -3,14 +3,14 @@ import { Bot } from '../bot'
 import { BotEvent } from '../types'
 
 const botEvent: BotEvent = {
-    name: 'interactionCreate',
+    name: 'Command Handler - Ping',
+    event: 'interactionCreate',
     once: false,
     async execute(bot: Bot, interaction: Interaction) {
         if (!interaction.isChatInputCommand()) return
+        if (interaction.commandName !== 'ping') return
 
-        if (interaction.commandName === 'ping') {
-          await interaction.reply('Pong!')
-        }
+        await interaction.reply('Pong!')
     }
 }
 

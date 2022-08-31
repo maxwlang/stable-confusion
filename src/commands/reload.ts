@@ -3,7 +3,7 @@ import { BotCommand } from '../types';
 export default function(): BotCommand {
     const command = new SlashCommandBuilder()
         .setName('reload')
-        .setDescription('Reloads the bot.')
+        .setDescription('Reloads the bot')
     
     return {
         command,

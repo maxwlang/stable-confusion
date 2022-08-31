@@ -6,9 +6,8 @@ export default function(queueItem: QueueItem): BotEmbed {
         embeds: [
             new EmbedBuilder()
                 .setColor('#030354')
-                .setTitle('Processing Prompt')
-                .setDescription('Your image is being generated..')
-                .setThumbnail('https://i.gifer.com/2RNf.gif')
+                .setTitle('Queued Prompt Details')
+                .setThumbnail('https://i.imgur.com/wj1PRKP.png')
                 .setTimestamp()
                 .addFields([
                     {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
@@ -25,4 +24,3 @@ export default function(queueItem: QueueItem): BotEmbed {
         ]
     }
 }
-  

@@ -1,19 +1,20 @@
-import { ActionRowBuilder, EmbedBuilder, RESTPostAPIApplicationCommandsJSONBody, SlashCommandBuilder } from 'discord.js'
+import { ActionRowBuilder, ChatInputCommandInteraction, EmbedBuilder, RESTPostAPIApplicationCommandsJSONBody, SlashCommandBuilder } from 'discord.js'
 import { Bot } from './bot'
 
 export interface BotCommand {
-    command: SlashCommandBuilder
+    command: any // Should be a variant of SlashCommandBuilder
     commandJson: RESTPostAPIApplicationCommandsJSONBody
     guilds?: string[] // Array of guild ids for guild specific commands
 }
 
 export interface BotEmbed {
     embeds: EmbedBuilder[]
-    components?: ActionRowBuilder[]
+    components?: any // ActionRowBuilder[]
 }
 
 export interface BotEvent {
-    name: string // Event name, used by caller.
+    name: string // Display name of event module
+    event: string // Event name on discord
     once: boolean // Run once?
     execute: (
         bot: Bot,
@@ -23,7 +24,8 @@ export interface BotEvent {
 
 export interface QueueItem {
     uuid: string // Unique queue uuid
-    seed: string // RNG, numeric?
+    seed: number // RNG
+    interaction: ChatInputCommandInteraction
     discordCaller: string // Snowflake of caller for command
     prediction: {
         prompt: string // Prompt text

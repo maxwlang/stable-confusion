@@ -3,7 +3,7 @@ import { BotCommand } from '../types';
 export default function(): BotCommand {
     const command =  new SlashCommandBuilder()
         .setName('stop')
-        .setDescription('Stops a currently processing image.')
+        .setDescription('Stops a currently processing image')
 
     return {
         command,

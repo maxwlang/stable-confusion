@@ -8,5 +8,6 @@ import logger from './modules/logger'
     // @ts-ignore no-implicit-any
     } catch (e: any) {
         logger.error(e.toString())
+        logger.error(e.stack)
     }
 })()
