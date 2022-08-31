@@ -28,7 +28,7 @@ const botEvent: BotEvent = {
         const seed = interaction.options.getInteger('seed')
 
         const queueItem: QueueItem = {
-          discordCaller: interaction.user.id,
+          discordCaller: interaction.user.id.toString(),
           seed: seed ?? getRandomInt(1, 99999999),
           uuid: uuidv4(),
           interaction,
@@ -45,7 +45,7 @@ const botEvent: BotEvent = {
           }
         }
 
-        bot.log.debug(`QueueItem: ${JSON.stringify(queueItem)}`)
+        // bot.log.debug(`QueueItem: ${JSON.stringify(queueItem)}`)
         bot.log.debug(`isProcessing: ${bot.stableDiffusion.isProcessing()} hasQueue: ${bot.hasQueue()} queueLength: ${bot.queue.length}`)
 
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {

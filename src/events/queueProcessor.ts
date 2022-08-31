@@ -22,7 +22,7 @@ async function tick(bot: Bot) {
     tickLock = true
     bot.log.debug('Processing..')
     const queueItem = bot.queue[0]
-    bot.log.debug(JSON.stringify(queueItem))
+    // bot.log.debug(JSON.stringify(queueItem))
 
     try {
         const processingPromptEmbed = processingPrompt(queueItem)
