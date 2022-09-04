@@ -1,3 +1,16 @@
-module.exports = {
-    token: ''
+export default {
+    bot: {
+        token: '',
+        userid: '1014072069023088650'
+    },
+    admin: {
+        users: ['707022657354203180']
+    },
+    server: {
+        host: 'http://192.168.4.69',
+        port: 5000
+    },
+    logger: {
+        level: 'debug'
+    }
 }
