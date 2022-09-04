@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "predev": "rimraf ./dist && tsc",
+    "build": "tsc",
+    "predev": "rimraf ./dist && yarn run build",
     "dev": "yarn run start",
     "start": "node ./dist/index.js"
   },
