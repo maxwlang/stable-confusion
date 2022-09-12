@@ -1,4 +1,4 @@
-import { APIApplicationCommandOptionChoice, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import { BotCommand } from '../types';
 export default function(): BotCommand {
     const command = new SlashCommandBuilder()

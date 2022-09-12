@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "predev": "rimraf ./dist && yarn run build",
+    "build:tests": "tsc -p ./tsconfig.test.json",
+    "clean": "rimraf ./dist && rimraf ./dist.tests",
+    "predev": "yarn run clean && yarn run build",
     "dev": "yarn run start",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "pretest": "yarn run clean && yarn run build:tests",
+    "test": "mocha ./dist.tests/tests/**/**/*.test.js"
   },
   "author": "GotKrypto",
   "license": "MIT",
@@ -22,13 +26,18 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/bluebird": "^3.5.36",
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^9.1.1",
     "@types/ramda": "^0.28.15",
     "@types/uuid": "^8.3.4",
+    "chai": "^4.3.6",
     "eslint": "^8.23.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
+    "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
     "rimraf": "^3.0.2",
+    "sinon": "^14.0.0",
     "typescript": "^4.8.2"
   }
 }
