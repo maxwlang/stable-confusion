@@ -15,7 +15,6 @@ describe('Bot Command - Ping', () => {
 
         it('should match expected command JSON', () => {
             const registrationObject = pingCommandRegisterFunction()
-            console.log(registrationObject.commandJson)
             expect(registrationObject.commandJson).to.deep.eq(pingCommandJson)
         })
     })
