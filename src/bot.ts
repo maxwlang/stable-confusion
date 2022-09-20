@@ -1,11 +1,12 @@
-import bPromise from 'bluebird'
-import { Client, GatewayIntentBits, Partials, REST, Routes } from 'discord.js'
-import fs from 'fs'
-import { isEmpty, isNil } from 'ramda'
-import { Logger } from 'winston'
-import Config from './config/bot'
-import StableDiffusion from './modules/stableDiffusion'
 import { BotCommand, BotEvent, QueueItem } from './types'
+import { Client, GatewayIntentBits, Partials, REST, Routes } from 'discord.js'
+import { isEmpty, isNil } from 'ramda'
+
+import Config from './config/bot'
+import { Logger } from 'winston'
+import StableDiffusion from './modules/stableDiffusion'
+import bPromise from 'bluebird'
+import fs from 'fs'
 
 export class Bot extends Client {
     constructor(config: typeof Config, logger: Logger, options: {[k: string]: string}) {
