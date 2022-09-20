@@ -135,3 +135,12 @@ export const imagineCommandJson = {
         }
     ]
 }
+
+export const pingCommandJson = {
+    name: 'ping',
+    description: 'Pings the bot',
+    options: [],
+    default_permission: undefined,
+    default_member_permissions: undefined,
+    dm_permission: undefined
+  }

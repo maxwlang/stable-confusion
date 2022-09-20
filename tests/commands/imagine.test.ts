@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import imagineCommandRegisterFunction from '../../src/commands/imagine'
 import { imagineCommandJson } from '../support/commandJson'
+import imagineCommandRegisterFunction from '../../src/commands/imagine'
 
 describe('Bot Command - Imagine', () => {
     describe('Command Registration', () => {
@@ -18,11 +18,4 @@ describe('Bot Command - Imagine', () => {
             expect(registrationObject.commandJson).to.deep.eq(imagineCommandJson)
         })
     })
-
-    // describe('Command Handler', () => {
-    //     // the file in ./src/events/commandImagine.ts
-    //     it('should', () => {
-    //         expect(true).to.be.true
-    //     })
-    // })
 })
