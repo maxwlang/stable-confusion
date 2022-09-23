@@ -25,9 +25,11 @@ export interface BotEvent {
 export interface QueueItem {
     uuid: string // Unique queue uuid
     seed: number // RNG
+    messageId?: string // Discord main message snowflake ID.
     interaction: ChatInputCommandInteraction
     discordCaller: string // Snowflake of caller for command
     prediction: {
+        isLegacy?: true // Was this triggered by the legacy imagine command?
         prompt: string // Prompt text
         width: number // Image size, min 64
         height: number // Image size, min 64
