@@ -1,9 +1,11 @@
 import { isEmpty, isNil } from 'ramda'
 import { Bot } from '../bot'
-import imageResult from '../embeds/imageResult'
+import imageResultLegacy from '../embeds/imageResultLegacy'
 import processingPrompt from '../embeds/processingPrompt'
 import { BotEvent } from '../types'
-import { Attachment, AttachmentBuilder } from 'discord.js'
+import { AttachmentBuilder } from 'discord.js'
+import imageResult from '../embeds/imageResult'
+import sharp from 'sharp'
 
 const botEvent: BotEvent = {
     name: 'Queue Processor',
@@ -22,18 +24,18 @@ async function tick(bot: Bot) {
     tickLock = true
     bot.log.debug('Processing..')
     const queueItem = bot.queue[0]
-    // bot.log.debug(JSON.stringify(queueItem))
 
     try {
         const processingPromptEmbed = processingPrompt(queueItem)
-        await queueItem.interaction.editReply({
+        const message = await queueItem.interaction.editReply({
             embeds: processingPromptEmbed.embeds
         })
+        queueItem.messageId = message.id
 
         const processResults = await bot.stableDiffusion.processRequest(queueItem)
         if (processResults === false) {
             const message = await queueItem.interaction.editReply({
-                content: 'Processing for this prompt has failed. Most likely, the bot thinks it is NSFW.',
+                content: 'Processing for this prompt has failed.',
                 embeds: undefined
             })
             await message.suppressEmbeds()
@@ -44,22 +46,68 @@ async function tick(bot: Bot) {
             return
         }
 
-        // await queueItem.interaction.deleteReply()
-    
-        for (const processResult of processResults) {
-            const imageResultEmbed = imageResult()
-            const data: string = processResult.split(',')[1]
+        if (!isNil(queueItem.prediction.isLegacy) && queueItem.prediction.isLegacy) {
+            const imageResultEmbed = imageResultLegacy(queueItem)
+            const data: string = processResults[0].split(',')[1]
             const buf = Buffer.from(data, 'base64')
             const file = new AttachmentBuilder(buf, {
-                name: 'stable-confusion.jpeg'
+                name: `stable-confusion_${queueItem.uuid}.jpeg`
             })
-        
-
-            await queueItem.interaction.followUp({
+    
+    
+            await queueItem.interaction.editReply({
                 embeds: imageResultEmbed.embeds,
+                components: imageResultEmbed.components,
                 files: [file]
             })
+        } else {
+            const imageResultEmbed = imageResult(queueItem)
+            const imageData: string[] = processResults.map(base64 => base64.split(',')[1])
+            const imageBuffers = imageData.map(base64 => Buffer.from(base64, 'base64'))
 
+            const collageImage = await sharp({
+                create: {
+                  width: 1024,
+                  height: 1024,
+                  channels: 4,
+                  background: { r: 255, g: 255, b: 255, alpha: 1 }
+                }
+              })
+                .composite([
+                    {
+                        top: 0,
+                        left: 0,
+                        input: imageBuffers[0]
+                    },
+                    {
+                        top: 0,
+                        left: 512,
+                        input: imageBuffers[1]
+                    },
+                    {
+                        top: 512,
+                        left: 0,
+                        input: imageBuffers[2]
+                    },
+                    {
+                        top: 512,
+                        left: 512,
+                        input: imageBuffers[3]
+                    }
+                ])
+                .png()
+                .toBuffer()
+
+            const file = new AttachmentBuilder(collageImage, {
+                name: `stable-confusion_${queueItem.uuid}_collage.png`
+            })
+    
+    
+            await queueItem.interaction.editReply({
+                embeds: imageResultEmbed.embeds,
+                components: imageResultEmbed.components,
+                files: [file]
+            })
         }
     
         bot.log.debug('Processing complete')

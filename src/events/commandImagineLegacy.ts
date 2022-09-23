@@ -7,19 +7,22 @@ import addedToQueueNoWait from '../embeds/addedToQueueNoWait'
 import { getImageAttachmentURL, getRandomInt, validateHeight, validateWidth } from '../utils'
 
 const botEvent: BotEvent = {
-    name: 'Command Handler - Imagine',
+    name: 'Command Handler - Imagine Legacy',
     event: 'interactionCreate',
     once: false,
     async execute(bot: Bot, interaction: Interaction) {
         if (!interaction.isChatInputCommand()) return
-        if (interaction.commandName !== 'imagine') return
+        if (interaction.commandName !== 'imagine-legacy') return
 
         await interaction.deferReply()
 
         const prompt = interaction.options.getString('prompt', true)
+        const width = validateWidth(interaction.options.getInteger('width'))
+        const height = validateHeight(interaction.options.getInteger('height'))
         const initImage = getImageAttachmentURL(interaction.options.getAttachment('image'))
         const mask = getImageAttachmentURL(interaction.options.getAttachment('mask'))
         const promptStrength = interaction.options.getNumber('pstrength')
+        const numOutputs = interaction.options.getInteger('numout')
         const numInferenceSteps = interaction.options.getInteger('numsteps')
         const guidanceScale = interaction.options.getNumber('guidancescale')
         const seed = interaction.options.getInteger('seed')
@@ -30,13 +33,14 @@ const botEvent: BotEvent = {
           uuid: uuidv4(),
           interaction,
           prediction: {
+            isLegacy: true,
             prompt,
-            width: 512,
-            height: 512,
+            width,
+            height,
             initImage,
             mask,
             promptStrength: promptStrength ?? 0.8,
-            numOutputs: 4,
+            numOutputs: numOutputs ?? 1,
             numInferenceSteps: numInferenceSteps ?? 50,
             guidanceScale: guidanceScale ?? 7.5
           }
