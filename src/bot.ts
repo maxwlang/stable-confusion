@@ -15,7 +15,9 @@ export class Bot extends Client {
             partials: [Partials.Message, Partials.Channel, Partials.Reaction],
             ...options,
         })
+
         this.queue = []
+        this.queueItemReferences = [] // TODO: Can we store this elsewhere and keep non-json references? Redis?
         this.processing = null
         this.config = config
         this.log = logger
@@ -29,7 +31,13 @@ export class Bot extends Client {
     public queue: QueueItem[]
 
     /**
+     * Array of previously used QueueItems.
+     */
+    public queueItemReferences: QueueItem[]
+
+    /**
      * Current QueueItem processing.
+     * TODO: Support multi-processing
      */
     public processing: QueueItem | null
 
@@ -66,7 +74,7 @@ export class Bot extends Client {
     public addQueue = (queueItem: QueueItem): number => this.queue.push(queueItem)
 
     /**
-     * Deletes a QueueItem from queue. Throws if it can't find a QueueItem for uuid.
+     * Deletes a QueueItem from queue, adds it to queueItemReferences. Throws if it can't find a QueueItem for uuid.
      * @param uuid UUID of QueueItem.
      * @returns Array of deleted QueueItems.
      */
@@ -74,11 +82,48 @@ export class Bot extends Client {
         const queueIndex = this.queue.findIndex(queueItem => queueItem.uuid === uuid)
 
         if (queueIndex === -1) return []
-        return this.queue.splice(queueIndex, 1)
+        const queueItem = this.queue.splice(queueIndex, 1)
+        this.queueItemReferences.push(queueItem[0])
+        return queueItem
+    }
+
+    /**
+     * Deletes a QueueItem from QueueItem reference storage. Throws if it can't find a QueueItem for uuid.
+     * @param uuid UUID of QueueItem.
+     * @returns Array of deleted QueueItems.
+     */
+    public removeQueueItemReference = (uuid: string): QueueItem[] => {
+        const queueIndex = this.queueItemReferences.findIndex(queueItem => queueItem.uuid === uuid)
+
+        if (queueIndex === -1) return []
+        return this.queueItemReferences.splice(queueIndex, 1)
     }
     
+    /**
+     * Finds a QueueItem in queue storage by uuid.
+     * @param uuid UUID of QueueItem.
+     * @returns Array of found QueueItems.
+     */
     public findQueue = (uuid: string): QueueItem | undefined => {
         return this.queue.find(queueItem => queueItem.uuid === uuid)
+    }
+
+    /**
+     * Finds a QueueItem in reference storage by uuid.
+     * @param uuid UUID of QueueItem.
+     * @returns Array of found QueueItems.
+     */
+    public findQueueItemReference = (uuid: string): QueueItem | undefined => {
+        return this.queueItemReferences.find(queueItem => queueItem.uuid === uuid)
+    }
+
+    /**
+     * Finds a QueueItem in reference storage by message ID.
+     * @param uuid UUID of QueueItem.
+     * @returns Array of found QueueItems.
+     */
+     public findQueueItemReferenceByMessageID = (messageId: string): QueueItem | undefined => {
+        return this.queueItemReferences.find(queueItem => queueItem.messageId === messageId)
     }
 }
 
