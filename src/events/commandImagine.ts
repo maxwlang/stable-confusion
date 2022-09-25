@@ -1,9 +1,8 @@
 import { Interaction } from 'discord.js'
 import { Bot } from '../bot'
-import { BotEvent, QueueItem } from '../types'
-import addedToQueue from '../embeds/addedToQueue'
+import { BotEvent, QueueItem, QueueItemType } from '../types'
+import addedToQueue, { QueueType } from '../embeds/addedToQueue'
 import { v4 as uuidv4 } from 'uuid'
-import addedToQueueNoWait from '../embeds/addedToQueueNoWait'
 import { getImageAttachmentURL, getRandomInt, validateHeight, validateWidth } from '../utils'
 
 const botEvent: BotEvent = {
@@ -29,6 +28,7 @@ const botEvent: BotEvent = {
           seed: seed ?? getRandomInt(1, 99999999),
           uuid: uuidv4(),
           interaction,
+          type: QueueItemType.Default,
           prediction: {
             prompt,
             width: 512,
@@ -42,20 +42,17 @@ const botEvent: BotEvent = {
           }
         }
 
-        // bot.log.debug(`QueueItem: ${JSON.stringify(queueItem)}`)
-        bot.log.debug(`isProcessing: ${bot.stableDiffusion.isProcessing()} hasQueue: ${bot.hasQueue()} queueLength: ${bot.queue.length}`)
-
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {
           const queuePos = bot.addQueue(queueItem)
 
           await interaction.editReply({
-            embeds: addedToQueue(queuePos, queueItem).embeds
+            embeds: addedToQueue(QueueType.Queued, queueItem, queuePos).embeds
           })
         } else {
           bot.addQueue(queueItem)
 
           await interaction.editReply({
-            embeds: addedToQueueNoWait(queueItem).embeds
+            embeds: addedToQueue(QueueType.Instant, queueItem).embeds
           })
         }
     }

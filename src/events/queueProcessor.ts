@@ -1,8 +1,7 @@
 import { isEmpty, isNil } from 'ramda'
 import { Bot } from '../bot'
-import imageResultLegacy from '../embeds/imageResultLegacy'
 import processingPrompt from '../embeds/processingPrompt'
-import { BotEvent } from '../types'
+import { BotEvent, QueueItemType } from '../types'
 import { AttachmentBuilder } from 'discord.js'
 import imageResult from '../embeds/imageResult'
 import sharp from 'sharp'
@@ -22,7 +21,7 @@ async function tick(bot: Bot) {
     if (bot.stableDiffusion.isProcessing() || tickLock) return
     if (isNil(bot.queue) || isEmpty(bot.queue)) return
     tickLock = true
-    bot.log.debug('Processing..')
+    bot.log.debug(`isProcessing ; queueLength: ${bot.queue.length}`)
     const queueItem = bot.queue[0]
 
     try {
@@ -46,68 +45,73 @@ async function tick(bot: Bot) {
             return
         }
 
-        if (!isNil(queueItem.prediction.isLegacy) && queueItem.prediction.isLegacy) {
-            const imageResultEmbed = imageResultLegacy(queueItem)
-            const data: string = processResults[0].split(',')[1]
-            const buf = Buffer.from(data, 'base64')
-            const file = new AttachmentBuilder(buf, {
-                name: `stable-confusion_${queueItem.uuid}.jpeg`
-            })
-    
-    
-            await queueItem.interaction.editReply({
-                embeds: imageResultEmbed.embeds,
-                components: imageResultEmbed.components,
-                files: [file]
-            })
-        } else {
-            const imageResultEmbed = imageResult(queueItem)
-            const imageData: string[] = processResults.map(base64 => base64.split(',')[1])
-            const imageBuffers = imageData.map(base64 => Buffer.from(base64, 'base64'))
+        switch(queueItem.type) {
+            case QueueItemType.Quick: {
+                const imageResultEmbed = imageResult(queueItem)
+                const data: string = processResults[0].split(',')[1]
+                const buf = Buffer.from(data, 'base64')
+                const file = new AttachmentBuilder(buf, {
+                    name: `stable-confusion_${queueItem.uuid}.jpeg`
+                })
+        
+                await queueItem.interaction.editReply({
+                    embeds: imageResultEmbed.embeds,
+                    components: imageResultEmbed.components,
+                    files: [file]
+                })
+                break
+            }
 
-            const collageImage = await sharp({
-                create: {
-                  width: 1024,
-                  height: 1024,
-                  channels: 4,
-                  background: { r: 255, g: 255, b: 255, alpha: 1 }
-                }
-              })
-                .composite([
-                    {
-                        top: 0,
-                        left: 0,
-                        input: imageBuffers[0]
-                    },
-                    {
-                        top: 0,
-                        left: 512,
-                        input: imageBuffers[1]
-                    },
-                    {
-                        top: 512,
-                        left: 0,
-                        input: imageBuffers[2]
-                    },
-                    {
-                        top: 512,
-                        left: 512,
-                        input: imageBuffers[3]
+            case QueueItemType.Default:
+            default: {
+                const imageResultEmbed = imageResult(queueItem)
+                const imageData: string[] = processResults.map(base64 => base64.split(',')[1])
+                const imageBuffers = imageData.map(base64 => Buffer.from(base64, 'base64'))
+
+                const collageImage = await sharp({
+                    create: {
+                    width: 1024,
+                    height: 1024,
+                    channels: 4,
+                    background: { r: 255, g: 255, b: 255, alpha: 1 }
                     }
-                ])
-                .png()
-                .toBuffer()
+                })
+                    .composite([
+                        {
+                            top: 0,
+                            left: 0,
+                            input: imageBuffers[0]
+                        },
+                        {
+                            top: 0,
+                            left: 512,
+                            input: imageBuffers[1]
+                        },
+                        {
+                            top: 512,
+                            left: 0,
+                            input: imageBuffers[2]
+                        },
+                        {
+                            top: 512,
+                            left: 512,
+                            input: imageBuffers[3]
+                        }
+                    ])
+                    .png()
+                    .toBuffer()
 
-            const file = new AttachmentBuilder(collageImage, {
-                name: `stable-confusion_${queueItem.uuid}_collage.png`
-            })
-    
-    
-            await queueItem.interaction.editReply({
-                embeds: imageResultEmbed.embeds,
-                components: imageResultEmbed.components,
-                files: [file]
-            })
+                const file = new AttachmentBuilder(collageImage, {
+                    name: `stable-confusion_${queueItem.uuid}_collage.png`
+                })
+        
+        
+                await queueItem.interaction.editReply({
+                    embeds: imageResultEmbed.embeds,
+                    components: imageResultEmbed.components,
+                    files: [file]
+                })
+            }
         }
     
         bot.log.debug('Processing complete')

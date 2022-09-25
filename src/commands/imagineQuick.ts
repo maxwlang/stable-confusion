@@ -2,8 +2,8 @@ import { SlashCommandBuilder } from 'discord.js';
 import { BotCommand } from '../types';
 export default function(): BotCommand {
     const command = new SlashCommandBuilder()
-        .setName('imagine-legacy')
-        .setDescription('Generate images from prompts')
+        .setName('imagine-quick')
+        .setDescription('Generate a single image based on a prompt. Faster.')
         .addStringOption(option =>
             option.setName('prompt')
                 .setDescription('The prompt to generate an image with')
@@ -43,11 +43,6 @@ export default function(): BotCommand {
                 .setDescription('Prompt strength when using init image. 1.0 corresponds to full destruction of information in image')
                 .setMinValue(0)
                 .setMaxValue(1))
-        .addIntegerOption(option =>
-            option.setName('numout')
-                .setDescription('How many images to generate with this prompt')
-                .setMinValue(1)
-                .setMaxValue(4))
         .addIntegerOption(option =>
             option.setName('numsteps')
             .setDescription('Number of denoising steps. Default 50')
