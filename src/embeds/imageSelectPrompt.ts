@@ -15,7 +15,7 @@ export default function(queueItem: QueueItem): BotEmbed {
             new ActionRowBuilder()
                 .addComponents([
                     new SelectMenuBuilder()
-                        .setCustomId('image-select-prompt')
+                        .setCustomId(`image-select-prompt-${queueItem.type}`)
                         .setPlaceholder('Select an image')
                         .addOptions(
                             {

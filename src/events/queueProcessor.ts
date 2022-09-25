@@ -21,7 +21,7 @@ async function tick(bot: Bot) {
     if (bot.stableDiffusion.isProcessing() || tickLock) return
     if (isNil(bot.queue) || isEmpty(bot.queue)) return
     tickLock = true
-    bot.log.debug(`isProcessing ; queueLength: ${bot.queue.length}`)
+    bot.log.debug(`isProcessing ; queueLength: ${bot.queue.length - 1}`)
     const queueItem = bot.queue[0]
 
     try {
@@ -53,6 +53,8 @@ async function tick(bot: Bot) {
                 const file = new AttachmentBuilder(buf, {
                     name: `stable-confusion_${queueItem.uuid}.jpeg`
                 })
+
+                queueItem.imageData = [buf]
         
                 await queueItem.interaction.editReply({
                     embeds: imageResultEmbed.embeds,
@@ -105,6 +107,7 @@ async function tick(bot: Bot) {
                     name: `stable-confusion_${queueItem.uuid}_collage.png`
                 })
         
+                queueItem.imageData = imageBuffers
         
                 await queueItem.interaction.editReply({
                     embeds: imageResultEmbed.embeds,

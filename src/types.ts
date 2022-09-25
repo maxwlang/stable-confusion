@@ -23,17 +23,18 @@ export interface BotEvent {
 }
 
 export enum QueueItemType {
-    Default,
-    Quick,
-    Regenerated,
-    Variant,
-    Upscaled
+    Default = 'default',
+    Quick = 'quick',
+    Regenerated = 'regenerated',
+    Variant = 'variant',
+    Upscaled = 'upscaled'
 }
 
 export interface QueueItem {
     uuid: string // Unique queue uuid
     seed: number // RNG
     type: QueueItemType
+    imageData?: Buffer[] // Array of generated image buffers for request
     messageId?: string // Discord main message snowflake ID.
     interaction: ChatInputCommandInteraction
     discordCaller: string // Snowflake of caller for command
@@ -44,7 +45,7 @@ export interface QueueItem {
         initImage: string | undefined // Starter image to generate from
         mask: string | undefined // Mask image to generate with
         promptStrength: number // 0 - 1 float value, default 0.8
-        numOutputs: number  // Number of images to generate, default 1
+        numOutputs: number // Number of images to generate, default 1
         numInferenceSteps: number // Number of steps, default 50
         guidanceScale: number // Default 7.5
     }
