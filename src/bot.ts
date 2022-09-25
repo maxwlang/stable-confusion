@@ -118,12 +118,13 @@ export class Bot extends Client {
     }
 
     /**
-     * Finds a QueueItem in reference storage by message ID.
+     * Finds the latest QueueItem in reference storage by message ID.
      * @param uuid UUID of QueueItem.
      * @returns Array of found QueueItems.
      */
-     public findQueueItemReferenceByMessageID = (messageId: string): QueueItem | undefined => {
-        return this.queueItemReferences.find(queueItem => queueItem.messageId === messageId)
+     public findLatestQueueItemReferenceByMessageID = (messageId: string): QueueItem | undefined => {
+        const queueItems = this.queueItemReferences.filter(queueItem => queueItem.messageId === messageId)
+        return queueItems[queueItems.length - 1]
     }
 }
 
