@@ -7,7 +7,7 @@ export default function(queueItem: QueueItem): BotEmbed {
             new EmbedBuilder()
                 .setColor('#6aaa64')
                 .setTitle('Pick An Image')
-                .setDescription('Select an image with the dropdown below.')
+                .setDescription('Select an image with the dropdown below.\n\nClick the dropdown and wait a second or two before selecting your choice. If you see `Interaction Failed` after waiting, this is a bug and can be ignored.')
                 .setTimestamp()
                 .setImage(`attachment://stable-confusion_${queueItem.uuid}_collage.png`)
         ],

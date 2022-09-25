@@ -1,5 +1,5 @@
 import { Interaction } from "discord.js"
-import { compose, isEmpty, isNil } from "ramda"
+import { isEmpty, isNil } from "ramda"
 import { Bot } from '../bot'
 import { BotEvent, QueueItem, QueueItemType } from '../types'
 import imageSelectPrompt from '../embeds/imageSelectPrompt'
@@ -23,7 +23,7 @@ const botEvent: BotEvent = {
                 })
                 return
             }
-
+            
             const [selectedImage] = interaction.values
 
             // Ensure PNG

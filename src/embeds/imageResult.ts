@@ -46,7 +46,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                         {name: 'Seed', value: codeBlock(queueItem.seed.toString()), inline: false},
                         {name: 'Prompt ID', value: codeBlock(queueItem.uuid), inline: false}
                     ])
-                    .setImage(`attachment://stable-confusion_${queueItem.uuid}_upscale.png`)
+                    .setImage(`attachment://stable-confusion_${queueItem.uuid}_upscaled.jpeg`)
             ]
             break
 
@@ -87,6 +87,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     ])
             ]
             break
+
         case QueueItemType.Regenerated:
         case QueueItemType.Default:
         default:
