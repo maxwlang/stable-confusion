@@ -19,24 +19,24 @@ export default function(queueItem: QueueItem): BotEmbed {
                         .setPlaceholder('Select an image')
                         .addOptions(
                             {
-                                label: 'Top Left',
+                                label: '↖️ Top Left',
                                 description: 'The top left image.',
-                                value: 'topLeft',
+                                value: '0',
                             },
                             {
-                                label: 'Top Right',
+                                label: '↗️ Top Right',
                                 description: 'The top right image.',
-                                value: 'topRight',
+                                value: '1',
                             },
                             {
-                                label: 'Bottom Left',
+                                label: '↙️ Bottom Left',
                                 description: 'The bottom left image.',
-                                value: 'bottomLeft',
+                                value: '2',
                             },
                             {
-                                label: 'Bottom Right',
+                                label: '↘️ Bottom Right',
                                 description: 'The bottom right image.',
-                                value: 'bottomRight',
+                                value: '3',
                             },
                         )
                 ])
