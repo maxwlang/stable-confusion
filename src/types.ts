@@ -9,7 +9,7 @@ export interface BotCommand {
 
 export interface BotEmbed {
     embeds: EmbedBuilder[]
-    components?: any // ActionRowBuilder[]
+    components?: ActionRowBuilder<any>[]
 }
 
 export interface BotEvent {
@@ -22,14 +22,22 @@ export interface BotEvent {
     ) => void | Promise<void>
 }
 
+export enum QueueItemType {
+    Default,
+    Quick,
+    Regenerated,
+    Variant,
+    Upscaled
+}
+
 export interface QueueItem {
     uuid: string // Unique queue uuid
     seed: number // RNG
+    type: QueueItemType
     messageId?: string // Discord main message snowflake ID.
     interaction: ChatInputCommandInteraction
     discordCaller: string // Snowflake of caller for command
     prediction: {
-        isLegacy?: true // Was this triggered by the legacy imagine command?
         prompt: string // Prompt text
         width: number // Image size, min 64
         height: number // Image size, min 64
