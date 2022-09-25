@@ -1,5 +1,9 @@
 {
   "extends": "airbnb",
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "parserOptions": {
     "ecmaVersion": 2022
   },
@@ -20,7 +24,8 @@
     "arrow-parens": "off",
     "global-require": "off",
     "no-plusplus": "off",
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "quotes": ["error", "single"]
   },
   "ignorePatterns": [
     "src/sequelize/**"
