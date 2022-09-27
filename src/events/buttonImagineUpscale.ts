@@ -49,6 +49,8 @@ const botEvent: BotEvent = {
                 return
             }
 
+            await interaction.deferUpdate() // We defer the update here because we'll update the queueItem interaction instead.
+
             const imageSelectPromptEmbed = imageSelectPrompt({...referenceQueueItem, type: QueueItemType.Upscaled})
 
             await referenceQueueItem.interaction.editReply({
