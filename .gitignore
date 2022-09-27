@@ -9,3 +9,4 @@ dist.tests
 data
 src/config/*.ts
 src/config/*.json
+.env.local
