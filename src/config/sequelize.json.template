@@ -1,0 +1,15 @@
+{
+  "development": {
+    "database": "stable_confusion_development",
+    "host": "127.0.0.1",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "database": "stable_confusion",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "username": "stable_confusion",
+    "password": "stable_confusion",
+    "dialect": "mysql"
+  }
+}

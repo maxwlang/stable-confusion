@@ -7,6 +7,8 @@ import { Logger } from 'winston'
 import StableDiffusion from './modules/stableDiffusion'
 import bPromise from 'bluebird'
 import fs from 'fs'
+// @ts-ignore Ignore sequelize implicit any
+import db from './sequelize/models'
 
 export class Bot extends Client {
     constructor(config: typeof Config, logger: Logger, options: {[k: string]: string}) {
@@ -16,6 +18,7 @@ export class Bot extends Client {
             ...options,
         })
 
+        this.db = db
         this.queue = []
         this.queueItemReferences = [] // TODO: Can we store this elsewhere and keep non-json references? Redis?
         this.processing = null
@@ -24,6 +27,11 @@ export class Bot extends Client {
         this.rest = new REST({ version: '10' }).setToken(config.bot.token)
         this.stableDiffusion = new StableDiffusion(config.server.host, config.server.port)
     }
+
+    /**
+     * Sequelize
+     */
+    public db: any
 
     /**
      * Array of QueueItems awaiting processing.
