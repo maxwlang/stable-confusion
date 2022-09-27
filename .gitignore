@@ -8,3 +8,5 @@ dist.tests
 # Non-templated data
 data
 src/config/bot.ts
+
+.env.local
