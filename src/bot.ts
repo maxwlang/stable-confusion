@@ -132,6 +132,9 @@ module.exports = async (config: typeof Config, logger: Logger, options: {[k: str
     const bot = new Bot(config, logger, options)
     bot.login(config.bot.token)
 
+    // Empty commands -- ToDo: Maybe export this and below command loading into `/reload commands`?
+    // await bot.application?.commands.set([])
+
     // Register event handlers
     const eventFiles = fs.readdirSync('./dist/events').filter((file) => file.endsWith('.js'))
     await bPromise.each(eventFiles, file => {
