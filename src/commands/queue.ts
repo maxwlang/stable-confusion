@@ -3,6 +3,7 @@ import { BotCommand } from '../types';
 export default function(): BotCommand {
     const command =  new SlashCommandBuilder()
         .setName('queue')
+        .setDMPermission(false)
         .setDescription('Prompt queue')
             .addSubcommand(subcommand =>
                 subcommand

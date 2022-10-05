@@ -3,6 +3,7 @@ import { BotCommand } from '../types';
 export default function(): BotCommand {
     const command = new SlashCommandBuilder()
         .setName('imagine-quick')
+        .setDMPermission(false)
         .setDescription('Generate a single image based on a prompt. Faster.')
         .addStringOption(option =>
             option.setName('prompt')

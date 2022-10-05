@@ -27,8 +27,11 @@ export enum QueueItemType {
     Quick = 'quick',
     Regenerated = 'regenerated',
     Variant = 'variant',
-    Upscaled = 'upscaled'
+    Upscaled = 'upscaled',
+    Extended = 'extended'
 }
+
+// TODO: Create a base queueitem, extend for each queueitemtype. Introduce metadata object.
 
 export interface QueueItem {
     uuid: string // Unique queue uuid
@@ -39,7 +42,7 @@ export interface QueueItem {
     interaction: ChatInputCommandInteraction
     discordCaller: string // Snowflake of caller for command
     prediction: {
-        prompt: string // Prompt text
+        prompt?: string // Prompt text
         width: number // Image size, min 64
         height: number // Image size, min 64
         initImage: string | undefined // Starter image to generate from

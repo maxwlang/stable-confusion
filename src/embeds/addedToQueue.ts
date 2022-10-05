@@ -20,7 +20,7 @@ export default function(queueType: QueueType, queueItem: QueueItem, queuePositio
                     .setThumbnail('https://i.imgur.com/pXmPAAG.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Width', value: queueItem.prediction.width.toString(), inline: true},
                         {name: 'Height', value: queueItem.prediction.height.toString(), inline: true},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
@@ -44,7 +44,7 @@ export default function(queueType: QueueType, queueItem: QueueItem, queuePositio
                     .setThumbnail('https://i.imgur.com/pXmPAAG.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Width', value: queueItem.prediction.width.toString(), inline: true},
                         {name: 'Height', value: queueItem.prediction.height.toString(), inline: true},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},

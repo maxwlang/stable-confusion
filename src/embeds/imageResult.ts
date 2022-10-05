@@ -14,7 +14,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setDescription('Result for parameters\n\nGenerated using the quick imagine command. Check out `/imagine` for new features!')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Width', value: queueItem.prediction.width.toString(), inline: true},
                         {name: 'Height', value: queueItem.prediction.height.toString(), inline: true},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
@@ -37,7 +37,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setDescription('Result for upscale')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
@@ -58,7 +58,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setDescription('Variant results are displayed below')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
@@ -98,7 +98,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setDescription('Result for parameters')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},

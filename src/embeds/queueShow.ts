@@ -15,7 +15,7 @@ export default function(args: QueueShowArgs): BotEmbed {
         
         const queueField = [
             {name: position === 0 ? 'Next Up' : 'Queue Position', value: position === 0 ? 'This will be generated next' : `#${position}`, inline: false},
-            {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: true},
+            {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: true},
             {name: 'Owner', value: userMention(queueItem.discordCaller), inline: true},
             {name: 'Prompt ID', value: codeBlock(queueItem.uuid), inline: true},
         ]

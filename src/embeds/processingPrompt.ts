@@ -15,7 +15,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
@@ -36,7 +36,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
@@ -57,7 +57,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
@@ -78,7 +78,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
@@ -100,7 +100,7 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: codeBlock(queueItem.prediction.prompt), inline: false},
+                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
                         {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
                         {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
                         {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
