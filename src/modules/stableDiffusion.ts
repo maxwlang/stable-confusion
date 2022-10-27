@@ -33,7 +33,7 @@ export default class StableDiffusion {
                         "num_outputs": queueItem.prediction.numOutputs
                     }
                 }
-        
+                break
             }
 
             case QueueItemType.Variant: {
