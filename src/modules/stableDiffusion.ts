@@ -17,77 +17,54 @@ export default class StableDiffusion {
 
     public async processRequest(queueItem: QueueItem): Promise<false | string[]> {
         if (this.processing) return false
-        if (queueItem.type === QueueItemType.Variant) return this.processVariantRequest(queueItem)
-        if (queueItem.type === QueueItemType.Extended) return this.processExtendRequest(queueItem) // ToDo: Can we reduce duplicate code?
-
         this.abortController = new AbortController()
         this.processing = true
 
-        const body = {
-            input: {
-                prompt: queueItem.prediction.prompt,
-                width: queueItem.prediction.width,
-                height: queueItem.prediction.height,
-                "init_image": queueItem.prediction.initImage,
-                mask: queueItem.prediction.mask,
-                "prompt_strength": queueItem.prediction.promptStrength,
-                "num_outputs": queueItem.prediction.numOutputs,
-                "num_inference_steps": queueItem.prediction.numInferenceSteps,
-                "guidance_scale": queueItem.prediction.guidanceScale,
-                seed: queueItem.seed
+        let body
+        
+        switch (queueItem.type) {
+            case QueueItemType.Extended: {
+                body = {
+                    input: {
+                        width: queueItem.prediction.width,
+                        height: queueItem.prediction.height,
+                        "init_image": queueItem.prediction.initImage,
+                        "prompt_strength": queueItem.prediction.promptStrength,
+                        "num_outputs": queueItem.prediction.numOutputs
+                    }
+                }
+        
             }
-        }
 
-        const results = await axios.post(`${this.host}:${this.port ?? 5000}/predictions`, body, {
-            headers: {'Content-Type': 'application/json'}
-        }).catch(e => {
-            return null
-        })
-
-        this.processing = false
-        if (isNil(results) || isNil(results.data)) return false
-        return results.data.output as string[]
-    }
-
-    private async processVariantRequest(queueItem: QueueItem): Promise<false | string[]> {
-        if (this.processing) return false
-        this.abortController = new AbortController()
-        this.processing = true
-
-        const body = {
-            input: {
-                prompt: queueItem.prediction.prompt,
-                width: queueItem.prediction.width,
-                height: queueItem.prediction.height,
-                "init_image": queueItem.prediction.initImage,
-                "prompt_strength": queueItem.prediction.promptStrength,
-                "num_outputs": queueItem.prediction.numOutputs
+            case QueueItemType.Variant: {
+                body = {
+                    input: {
+                        prompt: queueItem.prediction.prompt,
+                        width: queueItem.prediction.width,
+                        height: queueItem.prediction.height,
+                        "init_image": queueItem.prediction.initImage,
+                        "prompt_strength": queueItem.prediction.promptStrength,
+                        "num_outputs": queueItem.prediction.numOutputs
+                    }
+                }
+                break
             }
-        }
 
-        const results = await axios.post(`${this.host}:${this.port ?? 5000}/predictions`, body, {
-            headers: {'Content-Type': 'application/json'}
-        }).catch(e => {
-            return null
-        })
-
-        this.processing = false
-        if (isNil(results) || isNil(results.data)) return false
-        return results.data.output as string[]
-    }
-
-    private async processExtendRequest(queueItem: QueueItem): Promise<false | string[]> {
-        if (this.processing) return false
-        this.abortController = new AbortController()
-        this.processing = true
-
-        const body = {
-            input: {
-                width: queueItem.prediction.width,
-                height: queueItem.prediction.height,
-                "init_image": queueItem.prediction.initImage,
-                "prompt_strength": queueItem.prediction.promptStrength,
-                "num_outputs": queueItem.prediction.numOutputs
+            default: {
+                body = {
+                    input: {
+                        prompt: queueItem.prediction.prompt,
+                        width: queueItem.prediction.width,
+                        height: queueItem.prediction.height,
+                        "init_image": queueItem.prediction.initImage,
+                        mask: queueItem.prediction.mask,
+                        "prompt_strength": queueItem.prediction.promptStrength,
+                        "num_outputs": queueItem.prediction.numOutputs,
+                        "num_inference_steps": queueItem.prediction.numInferenceSteps,
+                        "guidance_scale": queueItem.prediction.guidanceScale,
+                        seed: queueItem.seed
+                    }
+                }
             }
         }
 
