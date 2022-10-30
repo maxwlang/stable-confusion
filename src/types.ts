@@ -1,5 +1,11 @@
-import { ActionRowBuilder, ChatInputCommandInteraction, EmbedBuilder, RESTPostAPIApplicationCommandsJSONBody, SlashCommandBuilder } from 'discord.js'
+import { ActionRowBuilder, EmbedBuilder, RESTPostAPIApplicationCommandsJSONBody } from 'discord.js'
 import { Bot } from './bot'
+import * as QueueItems from './queueItems'
+
+// https://stackoverflow.com/a/40076355
+export type DeepPartial<T> = {
+    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
+}
 
 export interface BotCommand {
     command: any // Should be a variant of SlashCommandBuilder
@@ -22,34 +28,4 @@ export interface BotEvent {
     ) => void | Promise<void>
 }
 
-export enum QueueItemType {
-    Default = 'default',
-    Quick = 'quick',
-    Regenerated = 'regenerated',
-    Variant = 'variant',
-    Upscaled = 'upscaled',
-    Extended = 'extended'
-}
-
-// TODO: Create a base queueitem, extend for each queueitemtype. Introduce metadata object.
-
-export interface QueueItem {
-    uuid: string // Unique queue uuid
-    seed: number // RNG
-    type: QueueItemType
-    imageData?: Buffer[] // Array of generated image buffers for request
-    messageId?: string // Discord main message snowflake ID.
-    interaction: ChatInputCommandInteraction
-    discordCaller: string // Snowflake of caller for command
-    prediction: {
-        prompt?: string // Prompt text
-        width: number // Image size, min 64
-        height: number // Image size, min 64
-        initImage: string | undefined // Starter image to generate from
-        mask: string | undefined // Mask image to generate with
-        promptStrength: number // 0 - 1 float value, default 0.8
-        numOutputs: number // Number of images to generate, default 1
-        numInferenceSteps: number // Number of steps, default 50
-        guidanceScale: number // Default 7.5
-    }
-}
+export { QueueItems }

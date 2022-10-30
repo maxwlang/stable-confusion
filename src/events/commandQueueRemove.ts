@@ -21,7 +21,7 @@ const botEvent: BotEvent = {
             return
         }
 
-        if (interaction.user.id !== queueItem.discordCaller && !isAdminRequest) {
+        if (interaction.user.id !== queueItem.discordCallerSnowflake && !isAdminRequest) {
             await interaction.reply('You do not own this queue item.')
             return
         }

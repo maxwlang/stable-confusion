@@ -1,7 +1,7 @@
 import { ActionRowBuilder, EmbedBuilder, SelectMenuBuilder } from 'discord.js'
-import { BotEmbed, QueueItem } from '../types'
+import { BotEmbed, QueueItems } from '../types'
 
-export default function(queueItem: QueueItem): BotEmbed {
+export default function(queueItem: QueueItems.QueueItemInstances): BotEmbed {
     return {
         embeds: [
             new EmbedBuilder()

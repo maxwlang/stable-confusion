@@ -1,12 +1,12 @@
 import { EmbedBuilder, codeBlock, ActionRowBuilder } from 'discord.js'
-import { BotEmbed, QueueItem, QueueItemType } from '../types'
+import { BotEmbed, QueueItems } from '../types'
 
-export default function(queueItem: QueueItem): BotEmbed {
+export default function(queueItem: QueueItems.QueueItemInstances): BotEmbed {
     let embeds: EmbedBuilder[] = []
     let components: ActionRowBuilder<any>[] = []
 
     switch (queueItem.type) {
-        case QueueItemType.Quick:
+        case QueueItems.QueueItemTypes.Quick:
             embeds = [
                 new EmbedBuilder()
                     .setColor('#030354')
@@ -15,19 +15,19 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
-                        {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
-                        {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
-                        {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
-                        {name: 'Has Mask', value: typeof queueItem.prediction.mask === 'undefined' ? 'No' : 'Yes', inline: true},
-                        {name: 'Has Base Image', value: typeof queueItem.prediction.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Prompt', value: queueItem.prompt ? codeBlock(queueItem.prompt) : 'Not Supplied', inline: false},
+                        {name: 'Prompt Strength', value: queueItem.promptStrength.toString(), inline: true},
+                        {name: 'Steps', value: queueItem.numInferenceSteps.toString(), inline: true},
+                        {name: 'Guidance Scale', value: queueItem.guidanceScale.toString(), inline: true},
+                        {name: 'Has Mask', value: typeof queueItem.mask === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Has Base Image', value: typeof queueItem.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
                         {name: 'Seed', value: codeBlock(queueItem.seed.toString()), inline: false},
                         {name: 'Prompt ID', value: codeBlock(queueItem.uuid), inline: false}
                     ])
             ]
             break
         
-        case QueueItemType.Regenerated:
+        case QueueItems.QueueItemTypes.Regenerated:
             embeds = [
                 new EmbedBuilder()
                     .setColor('#030354')
@@ -36,19 +36,19 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
-                        {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
-                        {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
-                        {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
-                        {name: 'Has Mask', value: typeof queueItem.prediction.mask === 'undefined' ? 'No' : 'Yes', inline: true},
-                        {name: 'Has Base Image', value: typeof queueItem.prediction.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Prompt', value: queueItem.prompt ? codeBlock(queueItem.prompt) : 'Not Supplied', inline: false},
+                        {name: 'Prompt Strength', value: queueItem.promptStrength.toString(), inline: true},
+                        {name: 'Steps', value: queueItem.numInferenceSteps.toString(), inline: true},
+                        {name: 'Guidance Scale', value: queueItem.guidanceScale.toString(), inline: true},
+                        {name: 'Has Mask', value: typeof queueItem.mask === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Has Base Image', value: typeof queueItem.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
                         {name: 'Seed', value: codeBlock(queueItem.seed.toString()), inline: false},
                         {name: 'Prompt ID', value: codeBlock(queueItem.uuid), inline: false}
                     ])
             ]
             break
         
-        case QueueItemType.Variant:
+        case QueueItems.QueueItemTypes.Variant:
             embeds = [
                 new EmbedBuilder()
                     .setColor('#030354')
@@ -57,19 +57,19 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
-                        {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
-                        {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
-                        {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
-                        {name: 'Has Mask', value: typeof queueItem.prediction.mask === 'undefined' ? 'No' : 'Yes', inline: true},
-                        {name: 'Has Base Image', value: typeof queueItem.prediction.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Prompt', value: queueItem.prompt ? codeBlock(queueItem.prompt) : 'Not Supplied', inline: false},
+                        {name: 'Prompt Strength', value: queueItem.promptStrength.toString(), inline: true},
+                        {name: 'Steps', value: queueItem.numInferenceSteps.toString(), inline: true},
+                        {name: 'Guidance Scale', value: queueItem.guidanceScale.toString(), inline: true},
+                        {name: 'Has Mask', value: typeof queueItem.mask === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Has Base Image', value: typeof queueItem.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
                         {name: 'Seed', value: codeBlock(queueItem.seed.toString()), inline: false},
                         {name: 'Prompt ID', value: codeBlock(queueItem.uuid), inline: false}
                     ])
             ]
             break
         
-        case QueueItemType.Upscaled:
+        case QueueItems.QueueItemTypes.Upscaled:
             embeds = [
                 new EmbedBuilder()
                     .setColor('#030354')
@@ -78,19 +78,19 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
-                        {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
-                        {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
-                        {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
-                        {name: 'Has Mask', value: typeof queueItem.prediction.mask === 'undefined' ? 'No' : 'Yes', inline: true},
-                        {name: 'Has Base Image', value: typeof queueItem.prediction.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Prompt', value: queueItem.prompt ? codeBlock(queueItem.prompt) : 'Not Supplied', inline: false},
+                        {name: 'Prompt Strength', value: queueItem.promptStrength.toString(), inline: true},
+                        {name: 'Steps', value: queueItem.numInferenceSteps.toString(), inline: true},
+                        {name: 'Guidance Scale', value: queueItem.guidanceScale.toString(), inline: true},
+                        {name: 'Has Mask', value: typeof queueItem.mask === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Has Base Image', value: typeof queueItem.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
                         {name: 'Seed', value: codeBlock(queueItem.seed.toString()), inline: false},
                         {name: 'Prompt ID', value: codeBlock(queueItem.uuid), inline: false}
                     ])
             ]
             break
 
-        case QueueItemType.Default:
+        case QueueItems.QueueItemTypes.Default:
         default:
             embeds = [
                 new EmbedBuilder()
@@ -100,12 +100,12 @@ export default function(queueItem: QueueItem): BotEmbed {
                     .setThumbnail('https://i.gifer.com/2RNf.gif')
                     .setTimestamp()
                     .addFields([
-                        {name: 'Prompt', value: queueItem.prediction.prompt ? codeBlock(queueItem.prediction.prompt) : 'Not Supplied', inline: false},
-                        {name: 'Prompt Strength', value: queueItem.prediction.promptStrength.toString(), inline: true},
-                        {name: 'Steps', value: queueItem.prediction.numInferenceSteps.toString(), inline: true},
-                        {name: 'Guidance Scale', value: queueItem.prediction.guidanceScale.toString(), inline: true},
-                        {name: 'Has Mask', value: typeof queueItem.prediction.mask === 'undefined' ? 'No' : 'Yes', inline: true},
-                        {name: 'Has Base Image', value: typeof queueItem.prediction.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Prompt', value: queueItem.prompt ? codeBlock(queueItem.prompt) : 'Not Supplied', inline: false},
+                        {name: 'Prompt Strength', value: queueItem.promptStrength.toString(), inline: true},
+                        {name: 'Steps', value: queueItem.numInferenceSteps.toString(), inline: true},
+                        {name: 'Guidance Scale', value: queueItem.guidanceScale.toString(), inline: true},
+                        {name: 'Has Mask', value: typeof queueItem.mask === 'undefined' ? 'No' : 'Yes', inline: true},
+                        {name: 'Has Base Image', value: typeof queueItem.initImage === 'undefined' ? 'No' : 'Yes', inline: true},
                         {name: 'Seed', value: codeBlock(queueItem.seed.toString()), inline: false},
                         {name: 'Prompt ID', value: codeBlock(queueItem.uuid), inline: false}
                     ])

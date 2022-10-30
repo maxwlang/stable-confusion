@@ -1,4 +1,4 @@
-import { BotCommand, BotEvent, QueueItem } from './types'
+import { BotCommand, BotEvent, QueueItems } from './types'
 import { Client, GatewayIntentBits, Partials, REST, Routes } from 'discord.js'
 import { isEmpty, isNil } from 'ramda'
 
@@ -28,18 +28,18 @@ export class Bot extends Client {
     /**
      * Array of QueueItems awaiting processing.
      */
-    public queue: QueueItem[]
+    public queue: QueueItems.QueueItemInstances[]
 
     /**
      * Array of previously used QueueItems.
      */
-    public queueItemReferences: QueueItem[]
+    public queueItemReferences: QueueItems.QueueItemInstances[]
 
     /**
      * Current QueueItem processing.
      * TODO: Support multi-processing
      */
-    public processing: QueueItem | null
+    public processing: QueueItems.QueueItemInstances | null
 
     /**
      * The bot's running config
@@ -71,14 +71,14 @@ export class Bot extends Client {
      * @param queueItem QueueItem to add to queue.
      * @returns Number of items in queue.
      */
-    public addQueue = (queueItem: QueueItem): number => this.queue.push(queueItem)
+    public addQueue = (queueItem: QueueItems.QueueItemInstances): number => this.queue.push(queueItem)
 
     /**
      * Deletes a QueueItem from queue, adds it to queueItemReferences. Throws if it can't find a QueueItem for uuid.
      * @param uuid UUID of QueueItem.
      * @returns Array of deleted QueueItems.
      */
-    public removeQueue = (uuid: string): QueueItem[] => {
+    public removeQueue = (uuid: string): QueueItems.QueueItemInstances[] => {
         const queueIndex = this.queue.findIndex(queueItem => queueItem.uuid === uuid)
 
         if (queueIndex === -1) return []
@@ -92,7 +92,7 @@ export class Bot extends Client {
      * @param uuid UUID of QueueItem.
      * @returns Array of deleted QueueItems.
      */
-    public removeQueueItemReference = (uuid: string): QueueItem[] => {
+    public removeQueueItemReference = (uuid: string): QueueItems.QueueItemInstances[] => {
         const queueIndex = this.queueItemReferences.findIndex(queueItem => queueItem.uuid === uuid)
 
         if (queueIndex === -1) return []
@@ -104,7 +104,7 @@ export class Bot extends Client {
      * @param uuid UUID of QueueItem.
      * @returns Array of found QueueItems.
      */
-    public findQueue = (uuid: string): QueueItem | undefined => {
+    public findQueue = (uuid: string): QueueItems.QueueItemInstances | undefined => {
         return this.queue.find(queueItem => queueItem.uuid === uuid)
     }
 
@@ -113,17 +113,17 @@ export class Bot extends Client {
      * @param uuid UUID of QueueItem.
      * @returns Array of found QueueItems.
      */
-    public findQueueItemReference = (uuid: string): QueueItem | undefined => {
+    public findQueueItemReference = (uuid: string): QueueItems.QueueItemInstances | undefined => {
         return this.queueItemReferences.find(queueItem => queueItem.uuid === uuid)
     }
 
     /**
-     * Finds the latest QueueItem in reference storage by message ID.
+     * Finds the latest QueueItem in reference storage by message snowflake.
      * @param uuid UUID of QueueItem.
      * @returns Array of found QueueItems.
      */
-     public findLatestQueueItemReferenceByMessageID = (messageId: string): QueueItem | undefined => {
-        const queueItems = this.queueItemReferences.filter(queueItem => queueItem.messageId === messageId)
+     public findLatestQueueItemReferenceByMessageSnowflake = (snowflake: string): QueueItems.QueueItemInstances | undefined => {
+        const queueItems = this.queueItemReferences.filter(queueItem => queueItem.discordMessageSnowflake === snowflake)
         return queueItems[queueItems.length - 1]
     }
 }
