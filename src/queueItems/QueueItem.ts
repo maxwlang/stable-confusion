@@ -4,7 +4,6 @@ import { ChatInputCommandInteraction, Snowflake } from "discord.js"
 import { QueueItemTypes } from '.'
 import { isEmpty, isNil } from 'ramda'
 
-
 export type QueueItemBody = {
     input: {
         prompt?: string // Prompt text

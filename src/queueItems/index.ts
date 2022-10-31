@@ -1,5 +1,5 @@
 import * as QueueItem from './QueueItem'
-// import * as QuickQueueItem from './QuickQueueItem'
+import * as QuickQueueItem from './QuickQueueItem'
 // import * as RegeneratedQueueItem from './RegeneratedQueueItem'
 // import * as VariantQueueItem from './VariantQueueItem'
 // import * as UpscaledQueueItem from './UpscaledQueueItem'
@@ -18,7 +18,7 @@ export type QueueItemInstances = QueueItem.QueueItem
 
 export {
     QueueItem,
-    // QuickQueueItem,
+    QuickQueueItem,
     // RegeneratedQueueItem,
     // VariantQueueItem,
     // UpscaledQueueItem,

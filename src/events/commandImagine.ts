@@ -1,9 +1,8 @@
 import { Interaction } from 'discord.js'
 import { Bot } from '../bot'
 import { BotEvent, QueueItems } from '../types'
-import { addedToInstantQueue, addedToQueue, QueueType } from '../embeds/addedToQueue'
-import { v4 as uuidv4 } from 'uuid'
-import { getImageAttachmentURL, getRandomInt, validateHeight, validateWidth } from '../utils'
+import { addedToInstantQueue, addedToQueue } from '../embeds/addedToQueue'
+import { getImageAttachmentURL } from '../utils'
 
 const botEvent: BotEvent = {
     name: 'Command Handler - Imagine',

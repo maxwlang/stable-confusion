@@ -1,11 +1,6 @@
 import { EmbedBuilder, codeBlock, ActionRowBuilder } from 'discord.js'
 import { BotEmbed, QueueItems } from '../types'
 
-export enum QueueType {
-    Instant,
-    Queued
-}
-
 export function addedToInstantQueue(queueItem: QueueItems.QueueItemInstances): BotEmbed {
     let embeds: EmbedBuilder[] = []
     let components: ActionRowBuilder<any>[] = []
