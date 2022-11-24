@@ -3,16 +3,17 @@ import { QueueItemConstructorInput } from './QueueItem'
 
 export class QuickQueueItem extends QueueItem.QueueItem {
     constructor(
-        queueItemConstructorInput: QueueItemConstructorInput,
-        quickQueueItemConstructorInput: unknown /* QuickQueueItemConstructorInput */
+        queueItemConstructorInput: QueueItemConstructorInput
     ) {
         super(queueItemConstructorInput)
-
-        // @ts-expect-error TODO: Figure out how to get this functional
-        this._type = QueueItemTypes.Quick // Set type to quick QueueItem
     }
 
+    public get type(): Readonly<QueueItemTypes> {
+        return QueueItemTypes.Quick
+    }
 
-    // QuickQueueItem specific properties
-    public test: string | undefined
+    // Number of images to generate
+    public get numOutputs(): Readonly<number> {
+        return 1
+    }
 }

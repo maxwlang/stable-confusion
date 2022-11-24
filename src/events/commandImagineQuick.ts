@@ -20,44 +20,22 @@ const botEvent: BotEvent = {
         const initImage = getImageAttachmentURL(interaction.options.getAttachment('image'))
         const mask = getImageAttachmentURL(interaction.options.getAttachment('mask'))
         const promptStrength = interaction.options.getNumber('pstrength')
-        const numOutputs = interaction.options.getInteger('numout')
         const numInferenceSteps = interaction.options.getInteger('numsteps')
         const guidanceScale = interaction.options.getNumber('guidancescale')
         const seed = interaction.options.getInteger('seed')
-
-        // const queueItem: QueueItem = {
-        //   discordCaller: interaction.user.id.toString(),
-        //   seed: seed ?? getRandomInt(1, 99999999),
-        //   uuid: uuidv4(),
-        //   interaction,
-        //   type: QueueItemType.Quick,
-        //   prediction: {
-        //     prompt,
-        //     width,
-        //     height,
-        //     initImage,
-        //     mask,
-        //     promptStrength: promptStrength ?? 0.8,
-        //     numOutputs: numOutputs ?? 1,
-        //     numInferenceSteps: numInferenceSteps ?? 50,
-        //     guidanceScale: guidanceScale ?? 7.5
-        //   }
-        // }
 
         const queueItem = new QueueItems.QuickQueueItem.QuickQueueItem({
             discordCallerSnowflake: interaction.user.id.toString(),
             discordInteraction: interaction,
             seed,
             prompt,
-            width: 512,
-            height: 512,
+            width,
+            height,
             initImage,
             mask,
             promptStrength,
             guidanceScale,
             numInferenceSteps
-        }, {
-          test: true
         })
 
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {

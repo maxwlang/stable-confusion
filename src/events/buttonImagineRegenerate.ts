@@ -1,10 +1,8 @@
 import { Interaction } from 'discord.js'
 import { isNil } from 'ramda'
 import { Bot } from '../bot'
-import { BotEvent, QueueItem, QueueItemType } from '../types'
-import { getRandomInt } from '../utils'
-import { v4 as uuidv4 } from 'uuid'
-import addedToQueue, { QueueType } from '../embeds/addedToQueue'
+import { BotEvent, QueueItems } from '../types'
+import { addedToInstantQueue, addedToQueue } from '../embeds/addedToQueue'
 
 const botEvent: BotEvent = {
     name: 'Button Handler - Imagine Regenerate',
@@ -14,7 +12,7 @@ const botEvent: BotEvent = {
         if (!interaction.isButton()) return
         if (interaction.customId !== 'button-imagine-result-regenerate') return
 
-        const referenceQueueItem = bot.findLatestQueueItemReferenceByMessageID(interaction.message.id)
+        const referenceQueueItem = bot.findLatestQueueItemReferenceByMessageSnowflake(interaction.message.id)
         if (isNil(referenceQueueItem)) {
             await interaction.reply({
                 ephemeral: true,
@@ -23,15 +21,21 @@ const botEvent: BotEvent = {
 
             return
         }
-        
-        const queueItem: QueueItem = {
-            ...referenceQueueItem,
-            type: QueueItemType.Regenerated,
-            discordCaller: interaction.user.id.toString(),
-            seed: getRandomInt(1, 99999999),
-            uuid: uuidv4()
-        }
-        
+
+        const queueItem = new QueueItems.RegeneratedQueueItem.RegeneratedQueueItem({
+            discordCallerSnowflake: interaction.user.id.toString(),
+            discordInteraction: interaction,
+            discordMessageSnowflake: interaction.message.id,
+            prompt: referenceQueueItem.prompt,
+            height: referenceQueueItem.height,
+            width: referenceQueueItem.width,
+            initImage: referenceQueueItem.initImage,
+            mask: referenceQueueItem.mask,
+            promptStrength: referenceQueueItem.promptStrength,
+            guidanceScale: referenceQueueItem.guidanceScale,
+            numInferenceSteps: referenceQueueItem.numInferenceSteps
+        })
+
         // Remove old attachment
         await interaction.message.removeAttachments()
 
@@ -43,15 +47,15 @@ const botEvent: BotEvent = {
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {
             const queuePos = bot.addQueue(queueItem)
 
-            await referenceQueueItem.interaction.editReply({
-                embeds: addedToQueue(QueueType.Queued, queueItem, queuePos).embeds,
+            await referenceQueueItem.discordInteraction.editReply({
+                embeds: addedToQueue(queueItem, queuePos).embeds,
                 components: []
             })
         } else {
             bot.addQueue(queueItem)
 
-            await referenceQueueItem.interaction.editReply({
-                embeds: addedToQueue(QueueType.Instant, queueItem).embeds,
+            await referenceQueueItem.discordInteraction.editReply({
+                embeds: addedToInstantQueue(queueItem).embeds,
                 components: []
             })
         }

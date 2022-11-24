@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getRandomInt } from '../utils'
-import { ChatInputCommandInteraction, Snowflake } from "discord.js"
+import { ButtonInteraction, ChatInputCommandInteraction, Snowflake } from "discord.js"
 import { QueueItemTypes } from '.'
 import { isEmpty, isNil } from 'ramda'
 
@@ -22,7 +22,7 @@ export type QueueItemBody = {
 export type QueueItemConstructorInput = {
     discordCallerSnowflake: Snowflake // Discord snowflake of invoking user
     discordMessageSnowflake?: Snowflake // Discord snowflake of Stable Confusion's related message embed
-    discordInteraction: ChatInputCommandInteraction // Discord interaction handle for QueueItem
+    discordInteraction: ChatInputCommandInteraction | ButtonInteraction // Discord interaction handle for QueueItem
 
     prompt?: string // Prompt text
     width: number // Image size, min 64
@@ -75,9 +75,8 @@ export class QueueItem {
         return this._uuid
     }
 
-    private _type: QueueItemTypes = QueueItemTypes.Default
     public get type(): Readonly<QueueItemTypes> {
-        return this._type
+        return QueueItemTypes.Default
     }
 
     private _imageData?: Buffer[]
@@ -109,8 +108,8 @@ export class QueueItem {
         this._discordCallerSnowflake = snowflake
     }
 
-    private _discordInteraction: ChatInputCommandInteraction
-    public get discordInteraction(): Readonly<ChatInputCommandInteraction> {
+    private _discordInteraction: ChatInputCommandInteraction | ButtonInteraction
+    public get discordInteraction(): Readonly<ChatInputCommandInteraction | ButtonInteraction> {
         return this._discordInteraction
     }
 

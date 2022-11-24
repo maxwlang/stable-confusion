@@ -1,7 +1,7 @@
 import { AttachmentBuilder, Interaction } from "discord.js"
 import { isEmpty, isNil } from "ramda"
 import { Bot } from '../bot'
-import { BotEvent, QueueItemType } from '../types'
+import { BotEvent } from '../types'
 
 import imageResult from "../embeds/imageResult"
 import imageSelectPrompt from "../embeds/imageSelectPrompt"
@@ -15,7 +15,7 @@ const botEvent: BotEvent = {
         if (interaction.customId === 'image-select-prompt-upscaled' && interaction.isSelectMenu()) {
             // TODO: Lock this action to user who triggered prompt?
 
-            const referenceQueueItem = bot.findLatestQueueItemReferenceByMessageID(interaction.message.id)
+            const referenceQueueItem = bot.findLatestQueueItemReferenceByMessageSnowflake(interaction.message.id)
             if (isNil(referenceQueueItem) || isNil(referenceQueueItem.imageData) || isEmpty(referenceQueueItem.imageData)) {
                 await interaction.reply({
                     ephemeral: true,
@@ -40,7 +40,7 @@ const botEvent: BotEvent = {
                 files: [file]
             })
         } else if (interaction.customId === 'button-imagine-result-upscale' && interaction.isButton()) {
-            const referenceQueueItem = bot.findLatestQueueItemReferenceByMessageID(interaction.message.id)
+            const referenceQueueItem = bot.findLatestQueueItemReferenceByMessageSnowflake(interaction.message.id)
             if (isNil(referenceQueueItem)) {
                 await interaction.reply({
                     ephemeral: true,
