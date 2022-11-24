@@ -1,10 +1,10 @@
+import { AttachmentBuilder } from 'discord.js'
 import { isEmpty, isNil } from 'ramda'
+import sharp from 'sharp'
 import { Bot } from '../bot'
+import imageResult from '../embeds/imageResult'
 import processingPrompt from '../embeds/processingPrompt'
 import { BotEvent, QueueItems } from '../types'
-import { AttachmentBuilder } from 'discord.js'
-import imageResult from '../embeds/imageResult'
-import sharp from 'sharp'
 
 const botEvent: BotEvent = {
     name: 'Queue Processor',
@@ -40,7 +40,7 @@ async function tick(bot: Bot) {
             await message.suppressEmbeds()
 
             bot.log.debug('Processing failed')
-            bot.removeQueue(queueItem.uuid)
+            bot.removeQueuedQueueItem(queueItem.uuid)
             tickLock = false
             return
         }
@@ -118,7 +118,7 @@ async function tick(bot: Bot) {
         }
     
         bot.log.debug('Processing complete')
-        bot.removeQueue(queueItem.uuid)
+        bot.removeQueuedQueueItem(queueItem.uuid)
         tickLock = false
     // @ts-ignore no-implicit-any
     } catch(e: any) {

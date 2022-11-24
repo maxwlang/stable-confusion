@@ -2,6 +2,7 @@ import { ActionRowBuilder, EmbedBuilder, SelectMenuBuilder } from 'discord.js'
 import { BotEmbed, QueueItems } from '../types'
 
 export default function(queueItem: QueueItems.QueueItemInstances): BotEmbed {
+    console.log(`Trigger: image-select-prompt-${queueItem.type}-${queueItem.uuid}`)
     return {
         embeds: [
             new EmbedBuilder()
@@ -15,7 +16,7 @@ export default function(queueItem: QueueItems.QueueItemInstances): BotEmbed {
             new ActionRowBuilder()
                 .addComponents([
                     new SelectMenuBuilder()
-                        .setCustomId(`image-select-prompt-${queueItem.type}`)
+                        .setCustomId(`image-select-prompt-${queueItem.type}-${queueItem.uuid}`)
                         .setPlaceholder('Select an image')
                         .addOptions(
                             {

@@ -1,9 +1,9 @@
+import * as ExtendedQueueItem from './ExtendedQueueItem'
 import * as QueueItem from './QueueItem'
 import * as QuickQueueItem from './QuickQueueItem'
 import * as RegeneratedQueueItem from './RegeneratedQueueItem'
-// import * as VariantQueueItem from './VariantQueueItem'
-// import * as UpscaledQueueItem from './UpscaledQueueItem'
-import * as ExtendedQueueItem from './ExtendedQueueItem'
+import * as UpscaledQueueItem from './UpscaledQueueItem'
+import * as VariantQueueItem from './VariantQueueItem'
 
 export enum QueueItemTypes {
     Default = 'default',
@@ -14,13 +14,19 @@ export enum QueueItemTypes {
     Extended = 'extended'
 }
 
-export type QueueItemInstances = QueueItem.QueueItem
+export type QueueItemInstances = 
+    QueueItem.QueueItem |
+    QuickQueueItem.QuickQueueItem |
+    RegeneratedQueueItem.RegeneratedQueueItem |
+    VariantQueueItem.VariantQueueItem |
+    UpscaledQueueItem.UpscaledQueueItem |
+    ExtendedQueueItem.ExtendedQueueItem
 
 export {
     QueueItem,
     QuickQueueItem,
     RegeneratedQueueItem,
-    // VariantQueueItem,
-    // UpscaledQueueItem,
+    VariantQueueItem,
+    UpscaledQueueItem,
     ExtendedQueueItem
 }

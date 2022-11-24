@@ -26,7 +26,7 @@ const botEvent: BotEvent = {
             return
         }
 
-        const deletedItems = bot.removeQueue(uuid)
+        const deletedItems = bot.removeQueuedQueueItem(uuid)
         const queueDetailsEmbed = queueDetails(deletedItems[0])
 
         await interaction.reply({

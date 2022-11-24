@@ -1,8 +1,10 @@
-import { v4 as uuidv4 } from 'uuid'
-import { getRandomInt } from '../utils'
-import { ButtonInteraction, ChatInputCommandInteraction, Snowflake } from "discord.js"
-import { QueueItemTypes } from '.'
+import { ButtonInteraction, ChatInputCommandInteraction, SelectMenuInteraction, Snowflake } from "discord.js"
 import { isEmpty, isNil } from 'ramda'
+import { v4 as uuidv4, validate as validateUuid } from 'uuid'
+import { QueueItemTypes } from '.'
+import { Bot } from '../bot'
+import { QueueItems } from '../types'
+import { getRandomInt } from '../utils'
 
 export type QueueItemBody = {
     input: {
@@ -22,7 +24,7 @@ export type QueueItemBody = {
 export type QueueItemConstructorInput = {
     discordCallerSnowflake: Snowflake // Discord snowflake of invoking user
     discordMessageSnowflake?: Snowflake // Discord snowflake of Stable Confusion's related message embed
-    discordInteraction: ChatInputCommandInteraction | ButtonInteraction // Discord interaction handle for QueueItem
+    discordInteraction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction // Discord interaction handle for QueueItem
 
     prompt?: string // Prompt text
     width: number // Image size, min 64
@@ -105,11 +107,11 @@ export class QueueItem {
             throw new Error('A snowflake must be provided.')
         }
 
-        this._discordCallerSnowflake = snowflake
+        this._discordMessageSnowflake = snowflake
     }
 
-    private _discordInteraction: ChatInputCommandInteraction | ButtonInteraction
-    public get discordInteraction(): Readonly<ChatInputCommandInteraction | ButtonInteraction> {
+    private _discordInteraction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction
+    public get discordInteraction(): ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction {
         return this._discordInteraction
     }
 
@@ -179,6 +181,23 @@ export class QueueItem {
      */
     public shuffleSeed() {
         this._seed = getRandomInt(1, 99999999)
+    }
+
+    /**
+     * Inherits a UUID from a passed QueueItem
+     * @param queueItem The QueueItem to inherit from.
+     * @returns UUID of QueueItem
+     */
+    public inheritUUIDFromQueueItem(queueItem: QueueItems.QueueItemInstances, bot: Bot) {
+        if (isNil(queueItem.uuid) || isEmpty(queueItem.uuid)) {
+            throw new Error('UUID must exist.')
+        }
+
+        if (!validateUuid(queueItem.uuid)) {
+            throw new Error('Invalid UUID.')
+        }
+
+        this._uuid = queueItem.uuid
     }
 
     /**

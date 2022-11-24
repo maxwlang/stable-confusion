@@ -1,7 +1,7 @@
 import { Interaction } from 'discord.js'
 import { Bot } from '../bot'
-import { BotEvent, QueueItems } from '../types'
 import { addedToInstantQueue, addedToQueue } from '../embeds/addedToQueue'
+import { BotEvent, QueueItems } from '../types'
 import { getImageAttachmentURL } from '../utils'
 
 const botEvent: BotEvent = {
@@ -37,17 +37,27 @@ const botEvent: BotEvent = {
         })
 
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {
-          const queuePos = bot.addQueue(queueItem)
+          const queuePos = bot.addQueuedQueueItem(queueItem)
 
-          await interaction.editReply({
+          const message = await interaction.editReply({
             embeds: addedToQueue(queueItem, queuePos).embeds
           })
-        } else {
-          bot.addQueue(queueItem)
 
-          await interaction.editReply({
+          bot.updateQueueItem(queueItem => {
+            queueItem.discordMessageSnowflake = message.id
+            return queueItem
+          }, queueItem.uuid)
+        } else {
+          bot.addQueuedQueueItem(queueItem)
+
+          const message = await interaction.editReply({
             embeds: addedToInstantQueue(queueItem).embeds
           })
+
+          bot.updateQueueItem(queueItem => {
+            queueItem.discordMessageSnowflake = message.id
+            return queueItem
+          }, queueItem.uuid)
         }
     }
 }

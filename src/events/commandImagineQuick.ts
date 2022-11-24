@@ -1,7 +1,7 @@
 import { Interaction } from 'discord.js'
 import { Bot } from '../bot'
-import { BotEvent, QueueItems } from '../types'
 import { addedToInstantQueue, addedToQueue } from '../embeds/addedToQueue'
+import { BotEvent, QueueItems } from '../types'
 import { getImageAttachmentURL, validateHeight, validateWidth } from '../utils'
 
 const botEvent: BotEvent = {
@@ -39,13 +39,13 @@ const botEvent: BotEvent = {
         })
 
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {
-          const queuePos = bot.addQueue(queueItem)
+          const queuePos = bot.addQueuedQueueItem(queueItem)
 
           await interaction.editReply({
             embeds: addedToQueue(queueItem, queuePos).embeds
           })
         } else {
-          bot.addQueue(queueItem)
+          bot.addQueuedQueueItem(queueItem)
 
           await interaction.editReply({
             embeds: addedToInstantQueue(queueItem).embeds

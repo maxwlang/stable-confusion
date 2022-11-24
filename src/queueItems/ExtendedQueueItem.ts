@@ -1,7 +1,7 @@
-import { QueueItemTypes, QueueItem } from '.'
-import { QueueItemConstructorInput } from './QueueItem'
+import { QueueItemTypes } from '.'
+import { QueueItem, QueueItemConstructorInput } from './QueueItem'
 
-export class ExtendedQueueItem extends QueueItem.QueueItem {
+export class ExtendedQueueItem extends QueueItem {
     constructor(
         queueItemConstructorInput: QueueItemConstructorInput
     ) {

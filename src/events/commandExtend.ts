@@ -1,9 +1,8 @@
 import { Interaction } from 'discord.js'
 import { Bot } from '../bot'
-import { BotEvent, QueueItems } from '../types'
 import { addedToInstantQueue, addedToQueue } from '../embeds/addedToQueue'
-import { v4 as uuidv4 } from 'uuid'
-import { getImageAttachmentURL, getRandomInt } from '../utils'
+import { BotEvent, QueueItems } from '../types'
+import { getImageAttachmentURL } from '../utils'
 
 const botEvent: BotEvent = {
     name: 'Command Handler - Extend',
@@ -37,13 +36,13 @@ const botEvent: BotEvent = {
         })
 
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {
-          const queuePos = bot.addQueue(queueItem)
+          const queuePos = bot.addQueuedQueueItem(queueItem)
 
           await interaction.editReply({
             embeds: addedToQueue(queueItem, queuePos).embeds
           })
         } else {
-          bot.addQueue(queueItem)
+          bot.addQueuedQueueItem(queueItem)
 
           await interaction.editReply({
             embeds: addedToInstantQueue(queueItem).embeds
