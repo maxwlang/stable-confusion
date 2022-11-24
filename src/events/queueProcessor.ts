@@ -1,10 +1,10 @@
-import { isEmpty, isNil } from 'ramda'
-import { Bot } from '../bot'
-import processingPrompt from '../embeds/processingPrompt'
-import { BotEvent, QueueItemType } from '../types'
 import { AttachmentBuilder } from 'discord.js'
-import imageResult from '../embeds/imageResult'
+import { isEmpty, isNil } from 'ramda'
 import sharp from 'sharp'
+import { Bot } from '../bot'
+import imageResult from '../embeds/imageResult'
+import processingPrompt from '../embeds/processingPrompt'
+import { BotEvent, QueueItems } from '../types'
 
 const botEvent: BotEvent = {
     name: 'Queue Processor',
@@ -26,27 +26,27 @@ async function tick(bot: Bot) {
 
     try {
         const processingPromptEmbed = processingPrompt(queueItem)
-        const message = await queueItem.interaction.editReply({
+        const message = await queueItem.discordInteraction.editReply({
             embeds: processingPromptEmbed.embeds
         })
-        queueItem.messageId = message.id
+        queueItem.discordMessageSnowflake = message.id
 
         const processResults = await bot.stableDiffusion.processRequest(queueItem)
         if (processResults === false) {
-            const message = await queueItem.interaction.editReply({
+            const message = await queueItem.discordInteraction.editReply({
                 content: 'Processing for this prompt has failed.',
                 embeds: undefined
             })
             await message.suppressEmbeds()
 
             bot.log.debug('Processing failed')
-            bot.removeQueue(queueItem.uuid)
+            bot.removeQueuedQueueItem(queueItem.uuid)
             tickLock = false
             return
         }
 
         switch(queueItem.type) {
-            case QueueItemType.Quick: {
+            case QueueItems.QueueItemTypes.Quick: {
                 const imageResultEmbed = imageResult(queueItem)
                 const data: string = processResults[0].split(',')[1]
                 const buf = Buffer.from(data, 'base64')
@@ -56,7 +56,7 @@ async function tick(bot: Bot) {
 
                 queueItem.imageData = [buf]
         
-                await queueItem.interaction.editReply({
+                await queueItem.discordInteraction.editReply({
                     embeds: imageResultEmbed.embeds,
                     components: imageResultEmbed.components,
                     files: [file]
@@ -64,7 +64,7 @@ async function tick(bot: Bot) {
                 break
             }
 
-            case QueueItemType.Default:
+            case QueueItems.QueueItemTypes.Default:
             default: {
                 const imageResultEmbed = imageResult(queueItem)
                 const imageData: string[] = processResults.map(base64 => base64.split(',')[1])
@@ -109,7 +109,7 @@ async function tick(bot: Bot) {
         
                 queueItem.imageData = imageBuffers
         
-                await queueItem.interaction.editReply({
+                await queueItem.discordInteraction.editReply({
                     embeds: imageResultEmbed.embeds,
                     components: imageResultEmbed.components,
                     files: [file]
@@ -118,15 +118,15 @@ async function tick(bot: Bot) {
         }
     
         bot.log.debug('Processing complete')
-        bot.removeQueue(queueItem.uuid)
+        bot.removeQueuedQueueItem(queueItem.uuid)
         tickLock = false
     // @ts-ignore no-implicit-any
     } catch(e: any) {
         bot.log.error(e.toString())
         bot.log.error(e.stack)
         tickLock = false
-        await queueItem.interaction.deleteReply().catch()
-        await queueItem.interaction.followUp('An error occured with your request.').catch()
+        await queueItem.discordInteraction.deleteReply().catch()
+        await queueItem.discordInteraction.followUp('An error occured with your request.').catch()
     }
 }
 

@@ -18,7 +18,7 @@ const botEvent: BotEvent = {
         let queueItems = bot.queue
         const userFilter = interaction.options.getUser('user')
         if (!isNil(userFilter)) {
-            queueItems = bot.queue.filter(queueItem => queueItem.discordCaller === userFilter.id)
+            queueItems = bot.queue.filter(queueItem => queueItem.discordCallerSnowflake === userFilter.id)
 
             if (isEmpty(queueItems)) {
                 await interaction.reply('This user has no queue items.')

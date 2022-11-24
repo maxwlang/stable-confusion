@@ -1,9 +1,8 @@
 import { Interaction } from 'discord.js'
 import { Bot } from '../bot'
-import { BotEvent, QueueItem, QueueItemType } from '../types'
-import addedToQueue, { QueueType } from '../embeds/addedToQueue'
-import { v4 as uuidv4 } from 'uuid'
-import { getImageAttachmentURL, getRandomInt, validateHeight, validateWidth } from '../utils'
+import { addedToInstantQueue, addedToQueue } from '../embeds/addedToQueue'
+import { BotEvent, QueueItems } from '../types'
+import { getImageAttachmentURL } from '../utils'
 
 const botEvent: BotEvent = {
     name: 'Command Handler - Imagine',
@@ -23,37 +22,42 @@ const botEvent: BotEvent = {
         const guidanceScale = interaction.options.getNumber('guidancescale')
         const seed = interaction.options.getInteger('seed')
 
-        const queueItem: QueueItem = {
-          discordCaller: interaction.user.id.toString(),
-          seed: seed ?? getRandomInt(1, 99999999),
-          uuid: uuidv4(),
-          interaction,
-          type: QueueItemType.Default,
-          prediction: {
+        const queueItem = new QueueItems.QueueItem.QueueItem({
+            discordCallerSnowflake: interaction.user.id.toString(),
+            discordInteraction: interaction,
+            seed,
             prompt,
             width: 512,
             height: 512,
             initImage,
             mask,
-            promptStrength: promptStrength ?? 0.8,
-            numOutputs: 4,
-            numInferenceSteps: numInferenceSteps ?? 50,
-            guidanceScale: guidanceScale ?? 7.5
-          }
-        }
+            promptStrength,
+            guidanceScale,
+            numInferenceSteps
+        })
 
         if (bot.stableDiffusion.isProcessing() || bot.hasQueue()) {
-          const queuePos = bot.addQueue(queueItem)
+          const queuePos = bot.addQueuedQueueItem(queueItem)
 
-          await interaction.editReply({
-            embeds: addedToQueue(QueueType.Queued, queueItem, queuePos).embeds
+          const message = await interaction.editReply({
+            embeds: addedToQueue(queueItem, queuePos).embeds
           })
+
+          bot.updateQueueItem(queueItem => {
+            queueItem.discordMessageSnowflake = message.id
+            return queueItem
+          }, queueItem.uuid)
         } else {
-          bot.addQueue(queueItem)
+          bot.addQueuedQueueItem(queueItem)
 
-          await interaction.editReply({
-            embeds: addedToQueue(QueueType.Instant, queueItem).embeds
+          const message = await interaction.editReply({
+            embeds: addedToInstantQueue(queueItem).embeds
           })
+
+          bot.updateQueueItem(queueItem => {
+            queueItem.discordMessageSnowflake = message.id
+            return queueItem
+          }, queueItem.uuid)
         }
     }
 }

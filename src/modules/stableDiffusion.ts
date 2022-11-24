@@ -1,6 +1,6 @@
-import { QueueItem, QueueItemType } from "../types"
 import axios from 'axios'
 import { isNil } from "ramda"
+import { QueueItems } from '../types'
 
 export default class StableDiffusion {
     constructor(host: string, port: number) {
@@ -15,7 +15,7 @@ export default class StableDiffusion {
     
     public isProcessing = () => this.processing
 
-    public async processRequest(queueItem: QueueItem): Promise<false | string[]> {
+    public async processRequest(queueItem: QueueItems.QueueItemInstances): Promise<false | string[]> {
         if (this.processing) return false
         this.abortController = new AbortController()
         this.processing = true
@@ -23,28 +23,28 @@ export default class StableDiffusion {
         let body
         
         switch (queueItem.type) {
-            case QueueItemType.Extended: {
+            case QueueItems.QueueItemTypes.Extended: {
                 body = {
                     input: {
-                        width: queueItem.prediction.width,
-                        height: queueItem.prediction.height,
-                        "init_image": queueItem.prediction.initImage,
-                        "prompt_strength": queueItem.prediction.promptStrength,
-                        "num_outputs": queueItem.prediction.numOutputs
+                        width: queueItem.width,
+                        height: queueItem.height,
+                        "init_image": queueItem.initImage,
+                        "prompt_strength": queueItem.promptStrength,
+                        "num_outputs": queueItem.numOutputs
                     }
                 }
                 break
             }
 
-            case QueueItemType.Variant: {
+            case QueueItems.QueueItemTypes.Variant: {
                 body = {
                     input: {
-                        prompt: queueItem.prediction.prompt,
-                        width: queueItem.prediction.width,
-                        height: queueItem.prediction.height,
-                        "init_image": queueItem.prediction.initImage,
-                        "prompt_strength": queueItem.prediction.promptStrength,
-                        "num_outputs": queueItem.prediction.numOutputs
+                        prompt: queueItem.prompt,
+                        width: queueItem.width,
+                        height: queueItem.height,
+                        "init_image": queueItem.initImage,
+                        "prompt_strength": queueItem.promptStrength,
+                        "num_outputs": queueItem.numOutputs
                     }
                 }
                 break
@@ -53,15 +53,15 @@ export default class StableDiffusion {
             default: {
                 body = {
                     input: {
-                        prompt: queueItem.prediction.prompt,
-                        width: queueItem.prediction.width,
-                        height: queueItem.prediction.height,
-                        "init_image": queueItem.prediction.initImage,
-                        mask: queueItem.prediction.mask,
-                        "prompt_strength": queueItem.prediction.promptStrength,
-                        "num_outputs": queueItem.prediction.numOutputs,
-                        "num_inference_steps": queueItem.prediction.numInferenceSteps,
-                        "guidance_scale": queueItem.prediction.guidanceScale,
+                        prompt: queueItem.prompt,
+                        width: queueItem.width,
+                        height: queueItem.height,
+                        "init_image": queueItem.initImage,
+                        mask: queueItem.mask,
+                        "prompt_strength": queueItem.promptStrength,
+                        "num_outputs": queueItem.numOutputs,
+                        "num_inference_steps": queueItem.numInferenceSteps,
+                        "guidance_scale": queueItem.guidanceScale,
                         seed: queueItem.seed
                     }
                 }
